@@ -12,7 +12,7 @@ API_CLASS(NoSpawn) class ONLINEPLATFORM_API SteamOnlinePlatform : public IOnline
 public:
 	SteamConfig* cachedConfig;
 	SteamOnlinePlatform(SteamConfig* config);
-
+	
 	bool Init() override;
 
 	bool VerifyOwnership() override;
@@ -22,7 +22,6 @@ public:
 	IAchievementService* GetAchievementService() override;
 
 	IFriendsService* GetFriendsService() override;
-
 };
 
 API_CLASS(NoSpawn) class ONLINEPLATFORM_API SteamAchievementService : public IAchievementService

@@ -16,7 +16,9 @@ API_CLASS() class STEAMWORKSFLAX_API SteamConfig : public ISerializable
     API_AUTO_SERIALIZATION();
     DECLARE_SCRIPTING_TYPE_NO_SPAWN(SteamConfig);
 public:
-	// Custom float value.
-    API_FIELD(Attributes = "EditorDisplay(\"AppID\")") 
+    /// <summary>
+    /// The associated steam AppID
+    /// </summary>
+    API_FIELD() 
     int AppID = 0;
 };
