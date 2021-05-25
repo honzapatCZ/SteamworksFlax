@@ -2,14 +2,15 @@
 
 #include "SteamOnlinePlatform.h"
 
-SteamOnlinePlatform::SteamOnlinePlatform(SteamConfig* config) {
+SteamOnlinePlatform::SteamOnlinePlatform() : IOnlinePlatform() {}
+SteamOnlinePlatform::SteamOnlinePlatform(SteamConfig* config) : SteamOnlinePlatform() {
     cachedConfig = config;
 }
 
 bool SteamOnlinePlatform::Init()
 {
     bool ret = SteamAPI_Init();
-
+    return ret;
 }
 
 bool SteamOnlinePlatform::VerifyOwnership()
@@ -26,12 +27,9 @@ IAchievementService* SteamOnlinePlatform::GetAchievementService()
     return cachedAchievement;    
 }
 
-IFriendsService* SteamOnlinePlatform::GetFriendsService()
-{
-    return nullptr;
-}
 
-SteamAchievementService::SteamAchievementService(SteamOnlinePlatform* parent) {
+SteamAchievementService::SteamAchievementService() : IAchievementService() {}
+SteamAchievementService::SteamAchievementService(SteamOnlinePlatform* parent) : SteamAchievementService() {
 
 }
 

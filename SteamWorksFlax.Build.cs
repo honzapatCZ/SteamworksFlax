@@ -22,6 +22,8 @@ public class SteamWorksFlax : GameModule
 
         options.ScriptingAPI.IgnoreMissingDocumentationWarnings = true;
 
+        options.PublicDependencies.Add("OnlinePlatform");
+
         options.CompileEnv.IncludePaths.Add(Path.Combine(FolderPath, "include"));
 
         if (options.ScriptingAPI.Defines.Contains("PLATFORM_WINDOWS"))

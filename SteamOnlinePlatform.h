@@ -8,9 +8,11 @@
 
 API_CLASS(NoSpawn) class ONLINEPLATFORM_API SteamOnlinePlatform : public IOnlinePlatform
 {
-	DECLARE_SCRIPTING_TYPE_MINIMAL(SteamOnlinePlatform)
+	DECLARE_SCRIPTING_TYPE_NO_SPAWN(SteamOnlinePlatform)
 public:
 	SteamConfig* cachedConfig;
+
+	SteamOnlinePlatform();
 	SteamOnlinePlatform(SteamConfig* config);
 	
 	bool Init() override;
@@ -20,14 +22,13 @@ public:
 	IAchievementService* cachedAchievement = nullptr;
 
 	IAchievementService* GetAchievementService() override;
-
-	IFriendsService* GetFriendsService() override;
 };
 
 API_CLASS(NoSpawn) class ONLINEPLATFORM_API SteamAchievementService : public IAchievementService
 {
-	DECLARE_SCRIPTING_TYPE_MINIMAL(SteamAchievementService)
+	DECLARE_SCRIPTING_TYPE_NO_SPAWN(SteamAchievementService)
 public:
+	SteamAchievementService();
 	SteamAchievementService(SteamOnlinePlatform* parent);
 
 	void SetAchievementProgress(StringView& identifier, float value) override;
