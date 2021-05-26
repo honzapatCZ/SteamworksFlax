@@ -6,15 +6,22 @@
 #include "include/steam_api.h"
 #include "SteamConfig.h"
 
-API_CLASS(NoSpawn) class ONLINEPLATFORM_API SteamOnlinePlatform : public IOnlinePlatform
+/// <summary>
+/// Main steam platform implementation
+/// </summary>
+API_CLASS(NoSpawn, Sealed) class STEAMWORKSFLAX_API SteamOnlinePlatform : public IOnlinePlatform
 {
 	DECLARE_SCRIPTING_TYPE_NO_SPAWN(SteamOnlinePlatform)
+protected:
+	explicit SteamOnlinePlatform() : 
+		IOnlinePlatform(SpawnParams(Guid::New(), TypeInitializer)) {
+	}
 public:
+	explicit SteamOnlinePlatform(SteamConfig* config) :	SteamOnlinePlatform(){
+		cachedConfig = config;
+	}
 	SteamConfig* cachedConfig;
 
-	SteamOnlinePlatform();
-	SteamOnlinePlatform(SteamConfig* config);
-	
 	bool Init() override;
 
 	bool VerifyOwnership() override;
@@ -24,12 +31,22 @@ public:
 	IAchievementService* GetAchievementService() override;
 };
 
-API_CLASS(NoSpawn) class ONLINEPLATFORM_API SteamAchievementService : public IAchievementService
+/// <summary>
+/// The steam achievements implementation
+/// </summary>
+API_CLASS(NoSpawn, Sealed) class STEAMWORKSFLAX_API SteamAchievementService : public IAchievementService
 {
 	DECLARE_SCRIPTING_TYPE_NO_SPAWN(SteamAchievementService)
+protected:
+	explicit SteamAchievementService() : 
+		IAchievementService(SpawnParams(Guid::New(), TypeInitializer)) {
+	}
+
 public:
-	SteamAchievementService();
-	SteamAchievementService(SteamOnlinePlatform* parent);
+	explicit SteamAchievementService(SteamOnlinePlatform* parent) : SteamAchievementService() {
+		steamPlatform = parent;
+	}
+	SteamOnlinePlatform* steamPlatform;
 
 	void SetAchievementProgress(StringView& identifier, float value) override;
 

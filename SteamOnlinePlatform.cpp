@@ -2,20 +2,18 @@
 
 #include "SteamOnlinePlatform.h"
 
-SteamOnlinePlatform::SteamOnlinePlatform() : IOnlinePlatform() {}
-SteamOnlinePlatform::SteamOnlinePlatform(SteamConfig* config) : SteamOnlinePlatform() {
-    cachedConfig = config;
-}
 
 bool SteamOnlinePlatform::Init()
 {
     bool ret = SteamAPI_Init();
     return ret;
+    //return true;
 }
 
 bool SteamOnlinePlatform::VerifyOwnership()
 {
-    return SteamAPI_RestartAppIfNecessary(cachedConfig->AppID);
+    //return SteamAPI_RestartAppIfNecessary(cachedAchievement->AppID);
+    return true;
 }
 
 IAchievementService* SteamOnlinePlatform::GetAchievementService()
@@ -24,14 +22,9 @@ IAchievementService* SteamOnlinePlatform::GetAchievementService()
     {
         cachedAchievement = New<SteamAchievementService>(this);
     }
-    return cachedAchievement;    
+    return cachedAchievement;
 }
 
-
-SteamAchievementService::SteamAchievementService() : IAchievementService() {}
-SteamAchievementService::SteamAchievementService(SteamOnlinePlatform* parent) : SteamAchievementService() {
-
-}
 
 void SteamAchievementService::SetAchievementProgress(StringView& identifier, float value)
 {
