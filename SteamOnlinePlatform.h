@@ -9,20 +9,23 @@
 /// <summary>
 /// Main steam platform implementation
 /// </summary>
-API_CLASS(NoSpawn, Sealed) class STEAMWORKSFLAX_API SteamOnlinePlatform : public IOnlinePlatform
+API_CLASS(NoSpawn) class STEAMWORKSFLAX_API SteamOnlinePlatform : public IOnlinePlatform
 {
 	DECLARE_SCRIPTING_TYPE_NO_SPAWN(SteamOnlinePlatform)
 protected:
-	explicit SteamOnlinePlatform() : 
-		IOnlinePlatform(SpawnParams(Guid::New(), TypeInitializer)) {
-	}
+	/// <summary>
+	/// Dummy initializer, should not be used
+	/// </summary>
+	explicit SteamOnlinePlatform() : IOnlinePlatform(SpawnParams(Guid::New(), TypeInitializer)), config(nullptr) {}
 public:
 	explicit SteamOnlinePlatform(SteamConfig* config) :	SteamOnlinePlatform(){
-		cachedConfig = config;
+		this->config = config;
 	}
-	SteamConfig* cachedConfig;
+	SteamConfig* config;
 
 	bool Init() override;
+
+	void Deinit() override;
 
 	bool VerifyOwnership() override;
 
@@ -34,19 +37,20 @@ public:
 /// <summary>
 /// The steam achievements implementation
 /// </summary>
-API_CLASS(NoSpawn, Sealed) class STEAMWORKSFLAX_API SteamAchievementService : public IAchievementService
+API_CLASS(NoSpawn) class STEAMWORKSFLAX_API SteamAchievementService : public IAchievementService
 {
 	DECLARE_SCRIPTING_TYPE_NO_SPAWN(SteamAchievementService)
 protected:
-	explicit SteamAchievementService() : 
-		IAchievementService(SpawnParams(Guid::New(), TypeInitializer)) {
-	}
+	/// <summary>
+	/// Dummy initializer, should not be used
+	/// </summary>
+	explicit SteamAchievementService() : IAchievementService(SpawnParams(Guid::New(), TypeInitializer)), parent(nullptr) {}
 
 public:
 	explicit SteamAchievementService(SteamOnlinePlatform* parent) : SteamAchievementService() {
-		steamPlatform = parent;
+		this->parent = parent;
 	}
-	SteamOnlinePlatform* steamPlatform;
+	SteamOnlinePlatform* parent;
 
 	void SetAchievementProgress(StringView& identifier, float value) override;
 

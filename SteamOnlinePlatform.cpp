@@ -10,10 +10,14 @@ bool SteamOnlinePlatform::Init()
     //return true;
 }
 
+void SteamOnlinePlatform::Deinit()
+{
+}
+
 bool SteamOnlinePlatform::VerifyOwnership()
 {
-    //return SteamAPI_RestartAppIfNecessary(cachedAchievement->AppID);
-    return true;
+    return !SteamAPI_RestartAppIfNecessary(config->AppID);
+    //return true;
 }
 
 IAchievementService* SteamOnlinePlatform::GetAchievementService()
