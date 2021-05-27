@@ -28,17 +28,4 @@ public:
     /// </summary>
     API_FIELD(Attributes = "Tooltip(\"Mapping from your universal achievement name to steam specific achievement name, if both names matches you dont have to put them here.\")")
     Dictionary<String, String> AchievementNameMapping;
-
-    /// <summary>
-    /// Converts normalized name to steam achievement name using the mapping specified in this config or input value if it couldnt be found
-    /// </summary>
-    /// <param name="">Normalized input</param>
-    /// <returns>The value in the mapping or input if it couldnt be found</returns>
-    API_FUNCTION()
-    String GetAchievementNameInSteam(String normalizedName) {
-        if (AchievementNameMapping.ContainsKey(normalizedName)) {
-            return AchievementNameMapping[normalizedName];
-        }
-        return normalizedName;
-    }
 };

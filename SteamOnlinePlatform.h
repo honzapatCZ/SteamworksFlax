@@ -2,7 +2,8 @@
 #pragma once
 
 #include "Engine/Scripting/Script.h"
-#include <FlaxOnlineSubsystem/IOnlinePlatform.h>
+#include "OnlineSubsystem/IOnlinePlatform.h"
+#include <OnlineSubsystem/IOnlinePlatform.h>
 #include "include/steam_api.h"
 #include "SteamConfig.h"
 
@@ -51,6 +52,18 @@ public:
 		this->parent = parent;
 	}
 	SteamOnlinePlatform* parent;
+
+	/// <summary>
+	/// Converts normalized name to steam achievement name using the mapping specified in this config or input value if it couldnt be found
+	/// </summary>
+	/// <param name="">Normalized input</param>
+	/// <returns>The value in the mapping or input if it couldnt be found</returns>
+	API_FUNCTION() FORCE_INLINE	String GetAchievementNameInSteam(String normalizedName) {
+		if (parent->config->AchievementNameMapping.ContainsKey(normalizedName)) {
+			return parent->config->AchievementNameMapping[normalizedName];
+		}
+		return normalizedName;
+	}
 
 	void SetAchievementProgress(const String identifier, float value) override;
 
