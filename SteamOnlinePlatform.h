@@ -52,13 +52,13 @@ public:
 	}
 	SteamOnlinePlatform* parent;
 
-	void SetAchievementProgress(StringView& identifier, float value) override;
+	void SetAchievementProgress(const String identifier, float value) override;
 
-	void SetAchievement(StringView& identifier, bool value) override;
+	void SetAchievement(const String identifier, bool value) override;
 
-	//API_FUNCTION() virtual Array<MonoString*> GetAchievements() = 0;
+	Array<String> GetAchievements() override;
 
-	float GetAchievementProgress(StringView& identifier) override;
+	float GetAchievementProgress(const String identifier) override;
 
-	bool GetAchievement(StringView& identifier) override;
+	bool GetAchievement(const String identifier) override;
 };

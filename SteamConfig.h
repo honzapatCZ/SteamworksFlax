@@ -6,6 +6,7 @@
 #include "Engine/Core/ISerializable.h"
 #include "Engine/Core/Types/BaseTypes.h"
 #include "Engine/Content/Assets/Model.h"
+#include "Engine/Core/Collections/Dictionary.h"
 #include "Engine/Scripting/ScriptingType.h"
 
 /// <summary>
@@ -17,8 +18,27 @@ API_CLASS() class STEAMWORKSFLAX_API SteamConfig : public ISerializable
     DECLARE_SCRIPTING_TYPE_NO_SPAWN(SteamConfig);
 public:
     /// <summary>
-    /// The associated steam AppID
+    /// The associated steam AppID. Will be used for verifying ownership at start of the game
     /// </summary>
-    API_FIELD() 
+    API_FIELD(Attributes = "Tooltip(\"The associated steam AppID. Will be used for verifying ownership at start of the game\")")
     int AppID = 0;
+
+    /// <summary>
+    /// Mapping from your universal achievement name to steam specific achievement name, if both names matches you dont have to put them here
+    /// </summary>
+    API_FIELD(Attributes = "Tooltip(\"Mapping from your universal achievement name to steam specific achievement name, if both names matches you dont have to put them here.\")")
+    Dictionary<String, String> AchievementNameMapping;
+
+    /// <summary>
+    /// Converts normalized name to steam achievement name using the mapping specified in this config or input value if it couldnt be found
+    /// </summary>
+    /// <param name="">Normalized input</param>
+    /// <returns>The value in the mapping or input if it couldnt be found</returns>
+    API_FUNCTION()
+    String GetAchievementNameInSteam(String normalizedName) {
+        if (AchievementNameMapping.ContainsKey(normalizedName)) {
+            return AchievementNameMapping[normalizedName];
+        }
+        return normalizedName;
+    }
 };

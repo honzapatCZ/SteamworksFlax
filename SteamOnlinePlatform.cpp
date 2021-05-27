@@ -12,10 +12,12 @@ bool SteamOnlinePlatform::Init()
 
 void SteamOnlinePlatform::Deinit()
 {
+    SteamAPI_Shutdown();
 }
 
 bool SteamOnlinePlatform::VerifyOwnership()
 {
+
     return !SteamAPI_RestartAppIfNecessary(config->AppID);
     //return true;
 }
@@ -30,22 +32,28 @@ IAchievementService* SteamOnlinePlatform::GetAchievementService()
 }
 
 
-void SteamAchievementService::SetAchievementProgress(StringView& identifier, float value)
+void SteamAchievementService::SetAchievementProgress(const String identifier, float value)
+{
+
+    return;
+}
+
+void SteamAchievementService::SetAchievement(const String identifier, bool value)
 {
     return;
 }
 
-void SteamAchievementService::SetAchievement(StringView& identifier, bool value)
+Array<String> SteamAchievementService::GetAchievements()
 {
-    return;
+    return Array<String>();
 }
 
-float SteamAchievementService::GetAchievementProgress(StringView& identifier)
+float SteamAchievementService::GetAchievementProgress(const String identifier)
 {
     return 0;
 }
 
-bool SteamAchievementService::GetAchievement(StringView& identifier)
+bool SteamAchievementService::GetAchievement(const String identifier)
 {
     return false;
 }
