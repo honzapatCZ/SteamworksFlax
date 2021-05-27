@@ -3,6 +3,18 @@
 #include "SteamOnlinePlatform.h"
 
 
+extern "C" void __cdecl SteamAPIDebugTextHook(int nSeverity, const char* pchDebugText)
+{
+	LOG_STR(Warning, String(pchDebugText));
+
+	if (nSeverity >= 1)
+	{
+		// place to set a breakpoint for catching API errors
+		int x = 3;
+		(void)x;
+	}
+}
+
 bool SteamOnlinePlatform::Init()
 {
     bool ret = SteamAPI_Init();
@@ -10,7 +22,7 @@ bool SteamOnlinePlatform::Init()
 	mSteamClient = SteamClient();
 	if (mSteamClient == nullptr) { return false; }
 
-	mSteamClient->SetWarningMessageHook(mSteamMessageHook);
+	mSteamClient->SetWarningMessageHook(&SteamAPIDebugTextHook);
 
 	mSteamUser = SteamUser();
 	if (mSteamUser == nullptr) { return false; }
@@ -76,9 +88,7 @@ void SteamOnlinePlatform::Deinit()
 
 bool SteamOnlinePlatform::VerifyOwnership()
 {
-
     return !SteamAPI_RestartAppIfNecessary(config->AppID);
-    //return true;
 }
 
 IAchievementService* SteamOnlinePlatform::GetAchievementService()
@@ -89,12 +99,6 @@ IAchievementService* SteamOnlinePlatform::GetAchievementService()
     }
     return cachedAchievement;
 }
-
-SteamAPIWarningMessageHook_t SteamOnlinePlatform::mSteamMessageHook()
-{
-	return SteamAPIWarningMessageHook_t();
-}
-
 
 void SteamAchievementService::SetAchievementProgress(const String& identifier, float value)
 {

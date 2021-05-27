@@ -33,8 +33,6 @@ public:
 
 	IAchievementService* GetAchievementService() override;
 
-	SteamAPIWarningMessageHook_t mSteamMessageHook();
-
 	ISteamClient* mSteamClient;
 	ISteamUser* mSteamUser;
 	ISteamFriends* mSteamFriends;
