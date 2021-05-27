@@ -32,6 +32,37 @@ public:
 	IAchievementService* cachedAchievement = nullptr;
 
 	IAchievementService* GetAchievementService() override;
+
+	SteamAPIWarningMessageHook_t mSteamMessageHook();
+
+	ISteamClient* mSteamClient;
+	ISteamUser* mSteamUser;
+	ISteamFriends* mSteamFriends;
+	ISteamUtils* mSteamUtils;
+	ISteamMatchmaking* mSteamMatchmaking;
+	ISteamUserStats* mSteamUserStats;
+	ISteamApps* mSteamApps;
+	ISteamMatchmakingServers* mSteamMatchmakingServers;
+	ISteamNetworking* mSteamNetworking;
+	ISteamRemoteStorage* mSteamRemoteStorage;
+	ISteamScreenshots* mSteamScreenshots;
+	ISteamGameSearch* mSteamGameSearch;
+	ISteamHTTP* mSteamHTTP;
+	ISteamController* mController;
+	ISteamUGC* mSteamUGC;
+	ISteamAppList* mSteamAppList;
+	ISteamMusic* mSteamMusic;
+	ISteamMusicRemote* mSteamMusicRemote;
+	ISteamHTMLSurface* mSteamHTMLSurface;
+	ISteamInventory* mSteamInventory;
+	ISteamVideo* mSteamVideo;
+	ISteamParentalSettings* mSteamParentalSettings;
+	ISteamInput* mSteamInput;
+	ISteamParties* mSteamParties;
+	ISteamRemotePlay* mSteamRemotePlay;
+	ISteamNetworkingUtils* mSteamNetworkingUtils;
+	ISteamNetworkingSockets* mSteamNetworkingSockets;
+	ISteamNetworkingMessages* mSteamNetworkingMessages;
 };
 
 /// <summary>
