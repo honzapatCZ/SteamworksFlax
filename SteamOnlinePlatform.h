@@ -2,8 +2,7 @@
 #pragma once
 
 #include "Engine/Scripting/Script.h"
-#include "OnlineSubsystem/IOnlinePlatform.h"
-#include <OnlineSubsystem/IOnlinePlatform.h>
+#include <FlaxOnlineSubsystem/IOnlinePlatform.h>
 #include "include/steam_api.h"
 #include "SteamConfig.h"
 
@@ -58,20 +57,20 @@ public:
 	/// </summary>
 	/// <param name="">Normalized input</param>
 	/// <returns>The value in the mapping or input if it couldnt be found</returns>
-	API_FUNCTION() FORCE_INLINE	String GetAchievementNameInSteam(String normalizedName) {
+	FORCE_INLINE String GetAchievementNameInSteam(String normalizedName) {
 		if (parent->config->AchievementNameMapping.ContainsKey(normalizedName)) {
 			return parent->config->AchievementNameMapping[normalizedName];
 		}
 		return normalizedName;
 	}
 
-	void SetAchievementProgress(const String identifier, float value) override;
+	void SetAchievementProgress(const String& identifier, float value) override;
 
-	void SetAchievement(const String identifier, bool value) override;
+	void SetAchievement(const String& identifier, bool value) override;
 
 	Array<String> GetAchievements() override;
 
-	float GetAchievementProgress(const String identifier) override;
+	float GetAchievementProgress(const String& identifier) override;
 
-	bool GetAchievement(const String identifier) override;
+	bool GetAchievement(const String& identifier) override;
 };

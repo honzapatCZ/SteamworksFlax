@@ -32,13 +32,13 @@ IAchievementService* SteamOnlinePlatform::GetAchievementService()
 }
 
 
-void SteamAchievementService::SetAchievementProgress(const String identifier, float value)
+void SteamAchievementService::SetAchievementProgress(const String& identifier, float value)
 {
 
     return;
 }
 
-void SteamAchievementService::SetAchievement(const String identifier, bool value)
+void SteamAchievementService::SetAchievement(const String& identifier, bool value)
 {
     return;
 }
@@ -48,12 +48,12 @@ Array<String> SteamAchievementService::GetAchievements()
     return Array<String>();
 }
 
-float SteamAchievementService::GetAchievementProgress(const String identifier)
+float SteamAchievementService::GetAchievementProgress(const String& identifier)
 {
     return 0;
 }
 
-bool SteamAchievementService::GetAchievement(const String identifier)
+bool SteamAchievementService::GetAchievement(const String& identifier)
 {
     return false;
 }

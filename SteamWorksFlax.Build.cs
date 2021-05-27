@@ -22,7 +22,7 @@ public class SteamWorksFlax : GameModule
 
         options.ScriptingAPI.IgnoreMissingDocumentationWarnings = true;
         
-        options.PrivateDependencies.Add("OnlineSubsystem");
+        options.PublicDependencies.Add("OnlineSubsystem");
 
         //options.CompileEnv.IncludePaths.Add(Path.Combine(FolderPath, "include"));
         
