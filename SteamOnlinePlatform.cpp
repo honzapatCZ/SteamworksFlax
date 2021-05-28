@@ -5,7 +5,7 @@
 
 extern "C" void __cdecl SteamAPIDebugTextHook(int nSeverity, const char* pchDebugText)
 {
-	LOG_STR(Warning, String(pchDebugText));
+	LOG_STR(Warning, TEXT("SteamApi: ") + String(pchDebugText));
 
 	if (nSeverity >= 1)
 	{
@@ -17,7 +17,13 @@ extern "C" void __cdecl SteamAPIDebugTextHook(int nSeverity, const char* pchDebu
 
 bool SteamOnlinePlatform::Init()
 {
-    bool ret = SteamAPI_Init();
+	if (!CheckDll()) {
+		return false;
+	}
+
+	if (!SteamAPI_Init()) {
+		return false;
+	}
 
 	mSteamClient = SteamClient();
 	if (mSteamClient == nullptr) { return false; }
@@ -81,14 +87,37 @@ bool SteamOnlinePlatform::Init()
     return true;
 }
 
+bool SteamOnlinePlatform::CheckDll()
+{
+	if (sizeof(void*) == 4) {
+		
+	}
+	else {
+
+	}
+
+	return true;
+}
+
 void SteamOnlinePlatform::Deinit()
 {
     SteamAPI_Shutdown();
 }
 
+void SteamOnlinePlatform::Update()
+{
+	SteamAPI_RunCallbacks();
+}
+
 bool SteamOnlinePlatform::VerifyOwnership()
 {
-    return !SteamAPI_RestartAppIfNecessary(config->AppID);
+	if (config->ForceAppToLaunchInSteam && SteamAPI_RestartAppIfNecessary(config->AppID)) {
+		return false;
+	}
+	if (mSteamApps != nullptr) {
+		return mSteamApps->BIsSubscribed() && mSteamApps->BIsSubscribedApp(config->AppID);
+	}
+	return false;
 }
 
 IAchievementService* SteamOnlinePlatform::GetAchievementService()
@@ -100,14 +129,21 @@ IAchievementService* SteamOnlinePlatform::GetAchievementService()
     return cachedAchievement;
 }
 
-void SteamAchievementService::SetAchievementProgress(const String& identifier, float value)
+void SteamAchievementService::SetAchievementProgress(const String& identifier, int value)
 {
-	return;
+	SteamAchievementInfo& val = GetAchievementNameInSteam(identifier);
+	int min;
+	int max;
+	parent->mSteamUserStats->GetAchievementProgressLimits((char*)val.apiName.Get(), &min, &max);
+	parent->mSteamUserStats->SetStat((char*)val.optionalStatName.Get(), value);
+	parent->mSteamUserStats->IndicateAchievementProgress((char*)val.apiName.Get(), value < min ? min : value, max);
+
+	parent->mSteamUserStats->StoreStats();
 }
 
 void SteamAchievementService::SetAchievement(const String& identifier, bool value)
 {
-	String& val = GetAchievementNameInSteam(identifier);
+	String& val = GetAchievementNameInSteam(identifier).apiName;
 	if (value) {
 		parent->mSteamUserStats->ClearAchievement((char*)val.Get());
 	}
@@ -120,20 +156,32 @@ void SteamAchievementService::SetAchievement(const String& identifier, bool valu
 Array<String> SteamAchievementService::GetAchievements()
 {
 	auto arr = Array<String>();
+	LOG_STR(Info, String::Format(TEXT("Num of ach: {0}"), parent->mSteamUserStats->GetNumAchievements()));
+
 	for (int i = 0; i < parent->mSteamUserStats->GetNumAchievements(); i++) {
-		arr.Add(String(parent->mSteamUserStats->GetAchievementName(i)));
+		String name = String(parent->mSteamUserStats->GetAchievementName(i));
+		LOG_STR(Info, TEXT("Testing: ") + name);
+		arr.Add(GetNormalizedNameFromSteam(name));
 	}	
     return arr;
 }
 
-float SteamAchievementService::GetAchievementProgress(const String& identifier)
+int SteamAchievementService::GetAchievementProgress(const String& identifier)
 {
-    return 0;
+	SteamAchievementInfo& val = GetAchievementNameInSteam(identifier);
+	int min;
+	int max;
+	parent->mSteamUserStats->GetAchievementProgressLimits((char*)val.apiName.Get(), &min, &max);
+	int data = 0;
+	parent->mSteamUserStats->GetStat((char*)val.optionalStatName.Get(), &data);
+	if (max < data)
+		return max;
+	return data;
 }
 
 bool SteamAchievementService::GetAchievement(const String& identifier)
 {
-	String& val = GetAchievementNameInSteam(identifier);
+	String& val = GetAchievementNameInSteam(identifier).apiName;
 	bool achieved = false;
 	parent->mSteamUserStats->GetAchievement((char*)val.Get(), &achieved);
     return achieved;

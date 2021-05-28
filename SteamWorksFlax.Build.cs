@@ -25,8 +25,8 @@ public class SteamWorksFlax : GameModule
         options.PublicDependencies.Add("OnlineSubsystem");
 
         //options.CompileEnv.IncludePaths.Add(Path.Combine(FolderPath, "include"));
-        
-        if(options.Platform.Target == TargetPlatform.Windows)
+
+        if (options.Platform.Target == TargetPlatform.Windows)
         {
             options.LinkEnv.InputLibraries.Add(Path.Combine(FolderPath, "lib", "steam_api64.lib"));
             options.DependencyFiles.Add(Path.Combine(FolderPath, "lib", "steam_api64.dll"));

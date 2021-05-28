@@ -9,6 +9,18 @@
 #include "Engine/Core/Collections/Dictionary.h"
 #include "Engine/Scripting/ScriptingType.h"
 
+
+API_STRUCT() struct STEAMWORKSFLAX_API SteamAchievementInfo : ISerializable {
+    API_AUTO_SERIALIZATION();
+    DECLARE_SCRIPTING_TYPE_MINIMAL(SteamAchievementInfo);
+
+    API_FIELD() String apiName;
+    /// <summary>
+    /// 
+    /// </summary>
+    API_FIELD() String optionalStatName;
+};
+
 /// <summary>
 /// SteamConfig Json Asset. 
 /// </summary>
@@ -24,8 +36,14 @@ public:
     int AppID = 0;
 
     /// <summary>
+    /// Whether or not start the game through steam if it wasnt(using shortcut etc), uses RestartAppIfNeccessary behind the scene
+    /// </summary>
+    API_FIELD(Attributes = "Tooltip(\"Whether or not start the game through steam if it wasnt(using shortcut etc), uses RestartAppIfNeccessary behind the scene\")")
+    bool ForceAppToLaunchInSteam = true;
+
+    /// <summary>
     /// Mapping from your universal achievement name to steam specific achievement name, if both names matches you dont have to put them here
     /// </summary>
     API_FIELD(Attributes = "Tooltip(\"Mapping from your universal achievement name to steam specific achievement name, if both names matches you dont have to put them here.\")")
-    Dictionary<String, String> AchievementNameMapping;
+    Dictionary<String, SteamAchievementInfo> AchievementNameMapping;
 };

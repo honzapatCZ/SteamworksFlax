@@ -25,7 +25,11 @@ public:
 
 	bool Init() override;
 
+	bool CheckDll();
+
 	void Deinit() override;
+
+	void Update() override;
 
 	bool VerifyOwnership() override;
 
@@ -33,34 +37,34 @@ public:
 
 	IAchievementService* GetAchievementService() override;
 
-	ISteamClient* mSteamClient;
-	ISteamUser* mSteamUser;
-	ISteamFriends* mSteamFriends;
-	ISteamUtils* mSteamUtils;
-	ISteamMatchmaking* mSteamMatchmaking;
-	ISteamUserStats* mSteamUserStats;
-	ISteamApps* mSteamApps;
-	ISteamMatchmakingServers* mSteamMatchmakingServers;
-	ISteamNetworking* mSteamNetworking;
-	ISteamRemoteStorage* mSteamRemoteStorage;
-	ISteamScreenshots* mSteamScreenshots;
-	ISteamGameSearch* mSteamGameSearch;
-	ISteamHTTP* mSteamHTTP;
-	ISteamController* mController;
-	ISteamUGC* mSteamUGC;
-	ISteamAppList* mSteamAppList;
-	ISteamMusic* mSteamMusic;
-	ISteamMusicRemote* mSteamMusicRemote;
-	ISteamHTMLSurface* mSteamHTMLSurface;
-	ISteamInventory* mSteamInventory;
-	ISteamVideo* mSteamVideo;
-	ISteamParentalSettings* mSteamParentalSettings;
-	ISteamInput* mSteamInput;
-	ISteamParties* mSteamParties;
-	ISteamRemotePlay* mSteamRemotePlay;
-	ISteamNetworkingUtils* mSteamNetworkingUtils;
-	ISteamNetworkingSockets* mSteamNetworkingSockets;
-	ISteamNetworkingMessages* mSteamNetworkingMessages;
+	ISteamClient* mSteamClient = nullptr;
+	ISteamUser* mSteamUser = nullptr;
+	ISteamFriends* mSteamFriends = nullptr;
+	ISteamUtils* mSteamUtils = nullptr;
+	ISteamMatchmaking* mSteamMatchmaking = nullptr;
+	ISteamUserStats* mSteamUserStats = nullptr;
+	ISteamApps* mSteamApps = nullptr;
+	ISteamMatchmakingServers* mSteamMatchmakingServers = nullptr;
+	ISteamNetworking* mSteamNetworking = nullptr;
+	ISteamRemoteStorage* mSteamRemoteStorage = nullptr;
+	ISteamScreenshots* mSteamScreenshots = nullptr;
+	ISteamGameSearch* mSteamGameSearch = nullptr;
+	ISteamHTTP* mSteamHTTP = nullptr;
+	ISteamController* mController = nullptr;
+	ISteamUGC* mSteamUGC = nullptr;
+	ISteamAppList* mSteamAppList = nullptr;
+	ISteamMusic* mSteamMusic = nullptr;
+	ISteamMusicRemote* mSteamMusicRemote = nullptr;
+	ISteamHTMLSurface* mSteamHTMLSurface = nullptr;
+	ISteamInventory* mSteamInventory = nullptr;
+	ISteamVideo* mSteamVideo = nullptr;
+	ISteamParentalSettings* mSteamParentalSettings = nullptr;
+	ISteamInput* mSteamInput = nullptr;
+	ISteamParties* mSteamParties = nullptr;
+	ISteamRemotePlay* mSteamRemotePlay = nullptr;
+	ISteamNetworkingUtils* mSteamNetworkingUtils = nullptr;
+	ISteamNetworkingSockets* mSteamNetworkingSockets = nullptr;
+	ISteamNetworkingMessages* mSteamNetworkingMessages = nullptr;
 };
 
 /// <summary>
@@ -86,20 +90,42 @@ public:
 	/// </summary>
 	/// <param name="">Normalized input</param>
 	/// <returns>The value in the mapping or input if it couldnt be found</returns>
-	FORCE_INLINE String GetAchievementNameInSteam(String normalizedName) {
+	FORCE_INLINE SteamAchievementInfo GetAchievementNameInSteam(String normalizedName) {
 		if (parent->config->AchievementNameMapping.ContainsKey(normalizedName)) {
 			return parent->config->AchievementNameMapping[normalizedName];
 		}
-		return normalizedName;
+		auto info = New<SteamAchievementInfo>();
+		info->apiName = normalizedName;
+		
+		return *info;
+	}
+	/// <summary>
+	/// Converts normalized name to steam achievement name using the mapping specified in this config or input value if it couldnt be found
+	/// </summary>
+	/// <param name="">Normalized input</param>
+	/// <returns>The value in the mapping or input if it couldnt be found</returns>
+	FORCE_INLINE String GetNormalizedNameFromSteam(String steamName) {
+		Array<SteamAchievementInfo> infos;
+		parent->config->AchievementNameMapping.GetValues(infos);
+		Array<String> keys;
+		parent->config->AchievementNameMapping.GetKeys(keys);
+		for (int i = 0; i < infos.Count(); )
+		{
+			if (infos[i].apiName == steamName) {
+				return keys[i];
+			}
+		}
+
+		return steamName;
 	}
 
-	void SetAchievementProgress(const String& identifier, float value) override;
+	void SetAchievementProgress(const String& identifier, int value) override;
 
 	void SetAchievement(const String& identifier, bool value) override;
 
 	Array<String> GetAchievements() override;
 
-	float GetAchievementProgress(const String& identifier) override;
+	int GetAchievementProgress(const String& identifier) override;
 
 	bool GetAchievement(const String& identifier) override;
 };
