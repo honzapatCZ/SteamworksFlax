@@ -5,6 +5,7 @@
 #include <FlaxOnlineSubsystem/IOnlinePlatform.h>
 #include "include/steam_api.h"
 #include "SteamConfig.h"
+#include "Engine/Core/Log.h"
 
 /// <summary>
 /// Main steam platform implementation

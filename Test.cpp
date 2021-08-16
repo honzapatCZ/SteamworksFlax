@@ -12,9 +12,17 @@ Test::Test(const SpawnParams& params)
 
 void Test::OnEnable()
 {
-    SteamConfig* conf = New<SteamConfig>();
-    conf->AppID = 480;
-    conf->ForceAppToLaunchInSteam = false;
+    auto ass = asset.Get();
+    if (ass && ass->WaitForLoaded())
+        ass = nullptr;
+
+    if (!ass)
+    {
+        LOG_STR(Info, TEXT("Could not load Steam Settings"));
+        return;
+    }
+
+    SteamConfig* conf = (SteamConfig*)ass->Instance;
 
     platform = New<SteamOnlinePlatform>(conf);
     

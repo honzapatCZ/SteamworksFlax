@@ -18,10 +18,12 @@ extern "C" void __cdecl SteamAPIDebugTextHook(int nSeverity, const char* pchDebu
 bool SteamOnlinePlatform::Init()
 {
 	if (!CheckDll()) {
+		LOG_STR(Error, TEXT("CheckDll() failed"));
 		return false;
 	}
 
 	if (!SteamAPI_Init()) {
+		LOG_STR(Error, TEXT("SteamAPI_Init() failed"));
 		return false;
 	}
 
@@ -158,7 +160,7 @@ Array<String> SteamAchievementService::GetAchievements()
 	auto arr = Array<String>();
 	LOG_STR(Info, String::Format(TEXT("Num of ach: {0}"), parent->mSteamUserStats->GetNumAchievements()));
 
-	for (int i = 0; i < parent->mSteamUserStats->GetNumAchievements(); i++) {
+	for (uint32 i = 0; i < parent->mSteamUserStats->GetNumAchievements(); i++) {
 		String name = String(parent->mSteamUserStats->GetAchievementName(i));
 		LOG_STR(Info, TEXT("Testing: ") + name);
 		arr.Add(GetNormalizedNameFromSteam(name));
